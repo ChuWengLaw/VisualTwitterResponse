@@ -3,15 +3,33 @@ extends layout
 block content
   .jumbotron.text-center
     h1 Visual Twitter Response
-    p Resize this responsive page to see the effect!
+    p Usage: Input keywords to search for top twitter posts and the average sentimental score of the posts.
+    p Example: #Trump#Covid-19 
   .container
-    .row
+    .form-group
+      label(for='query' style="font-size:26px") Search Twitter posts with keywords:
+      input#query.form-control(type='text' placeholder='#key#key#key')
+      button.btn.btn-primary(type='button') Search
+    .row      
       .col-sm-4
-        h3 Sample text
-        p Do something here
+        h3 1st post
+        .post1
       .col-sm-4
-        h3 Sample text
-        p Do something here
+        h3 2nd post
+        .post2
       .col-sm-4
-        h3 Sample text
-        p Do something here
+        h3 3rd post
+        .post3
+      .col-sm-4
+        h3 4th post
+        .post4
+      .col-sm-4
+        h3 5th post
+        .post5
+      .col-sm-4
+        h3 6th post
+        .post6
+    p(style='white-space:pre;')
+    button.btn.btn-info(data-toggle='collapse' data-target='#chart') Show Chart
+    #chart.collapse
+      |This will be our chart
