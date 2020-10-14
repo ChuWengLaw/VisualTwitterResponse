@@ -5,10 +5,26 @@ const logger = require('morgan');
 const router = express.Router();
 
 router.use(logger('tiny'));
+const OWMKey = '2d3a57bc337ad27b64c0af674c72edbd';
+
+const Twitter = require('twitter-lite')
+
+const T = new Twitter({
+  subdomain: "api", // "api" is the default (change for other subdomains)
+  version: "1.1", // version "1.1" is the default (change for other subdomains)
+  consumer_key: "8DEciTD5bVy4HQdSIXRevYFZI", // from Twitter.
+  consumer_secret: "lW1I6Sc3xMxDv8QNqz3Pbefe5ANbVTa91ldonJFxpii95IVHAv", // from Twitter.
+  access_token_key: "1072388204534292480", // from your User (oauth_token)
+  access_token_secret: "0qdK02JjKNjerysctpWgVFUU3Dvn1jJqwtmsIr1uiJICS" // from your User (oauth_token_secret)
+});
+
+
+
+/*
 
 const Twit = require('twit')
  
-const OWMKey = '2d3a57bc337ad27b64c0af674c72edbd';
+
 var T = new Twit({
   consumer_key:         '8DEciTD5bVy4HQdSIXRevYFZI',
   consumer_secret:      'lW1I6Sc3xMxDv8QNqz3Pbefe5ANbVTa91ldonJFxpii95IVHAv',
@@ -17,6 +33,7 @@ var T = new Twit({
   timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
   strictSSL:            true,     // optional - requires SSL certificates to be valid.
 })
+*/
 var rsp;
 /* Render home page. */
 router.get('/', (req, res) => {

@@ -13,6 +13,7 @@
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "pug": "2.0.0-beta11",
-    "twit": "^2.2.11"
+    "twit": "^2.2.11",
+    "twitter-lite": "^0.14.0"
   }
 }
