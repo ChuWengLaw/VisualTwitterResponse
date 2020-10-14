@@ -6,8 +6,9 @@ const router = express.Router();
 
 router.use(logger('tiny'));
 
-var Twit = require('twit')
+const Twit = require('twit')
  
+const OWMKey = '2d3a57bc337ad27b64c0af674c72edbd';
 var T = new Twit({
   consumer_key:         '8DEciTD5bVy4HQdSIXRevYFZI',
   consumer_secret:      'lW1I6Sc3xMxDv8QNqz3Pbefe5ANbVTa91ldonJFxpii95IVHAv',
@@ -19,19 +20,28 @@ var T = new Twit({
 var rsp;
 /* Render home page. */
 router.get('/', (req, res) => {
-  T.get('trends/place', { id: '1100661' }, function(err, data, response) {
-    for (var i = 0; i<data[0].trends.length;i++)
-    {
-      if (data[0].trends[i].tweet_volume != null)
-      {
-        console.log(data[0].trends[i]);
-      }
-        
-    }
+  var CityName_URL = `http://api.openweathermap.org/data/2.5/weather?q=Australia&appid=${OWMKey}`
+  axios.get(CityName_URL)
+          .then((response) => {
+            const rsp = response.data;
+
+            T.get('trends/closest', { lat: rsp.coord.lat , long: rsp.coord.lon}, function(err, data, response) {
+              var Location_WoeID = data[0].woeid
+              T.get('trends/place', { id: Location_WoeID }, function(err, data, response) {
+/*               for (var i = 0; i<data[0].trends.length;i++)
+              {
+                if (data[0].trends[i].tweet_volume != null)
+                {
+                  console.log(data[0].trends[i]);
+                }  
+              } */
+                console.log(data);
+              })
+            })
+          });
+
     
-  })
-  
-  res.render('index');
+    res.render('index');
 });
 
 module.exports = router;
