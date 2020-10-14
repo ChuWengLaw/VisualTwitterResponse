@@ -62,18 +62,13 @@ router.get('/', (req, res) => {
           ChartURL = ChartURL + `]}]}}`;
 
           console.log(ChartURL);
-
-          for (var i = 0; i < data[0].trends.length; i++) {
-            if (data[0].trends[i].tweet_volume != 'null') {
-
-              console.log(data[0].trends[i]);
-            }
-          }
-          //console.log(data[0].trends);
+          res.render('index');
+                  
         })
-      })
+      })      
     });
 });
+
 
 /* Search trending twitter posts */
 router.get('/search', (req, res) => {
