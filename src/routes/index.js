@@ -23,7 +23,7 @@ var T = new Twit({
   strictSSL:            true,     // optional - requires SSL certificates to be valid.
 })
 var rsp;
-var Location = 'Footscray';
+var Location = 'Australia';
 /* Render home page. */
 router.get('/', (req, res) => {
   var CityName_URL = `http://api.openweathermap.org/data/2.5/weather?q=${Location}&appid=${OWMKey}`
@@ -68,10 +68,10 @@ router.get('/', (req, res) => {
               
               for (var i = 0; i<data[0].trends.length;i++)
               {
-                if (data[0].trends[i].tweet_volume != null)
+                if (data[0].trends[i].tweet_volume != 'null')
                 {
 
-                  //console.log(data[0].trends[i]);
+                  console.log(data[0].trends[i]);
                 }  
               } 
                 //console.log(data[0].trends);
