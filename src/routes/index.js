@@ -4,6 +4,11 @@ const https = require('https');
 const logger = require('morgan');
 const router = express.Router();
 
+//write to file delete if not needed
+var fs = require('fs');
+
+
+
 router.use(logger('tiny'));
 
 const Twit = require('twit')
@@ -18,9 +23,10 @@ var T = new Twit({
   strictSSL:            true,     // optional - requires SSL certificates to be valid.
 })
 var rsp;
+var Location = 'America';
 /* Render home page. */
 router.get('/', (req, res) => {
-  var CityName_URL = `http://api.openweathermap.org/data/2.5/weather?q=Australia&appid=${OWMKey}`
+  var CityName_URL = `http://api.openweathermap.org/data/2.5/weather?q=${Location}&appid=${OWMKey}`
   axios.get(CityName_URL)
           .then((response) => {
             const rsp = response.data;
@@ -28,14 +34,14 @@ router.get('/', (req, res) => {
             T.get('trends/closest', { lat: rsp.coord.lat , long: rsp.coord.lon}, function(err, data, response) {
               var Location_WoeID = data[0].woeid
               T.get('trends/place', { id: Location_WoeID }, function(err, data, response) {
-/*               for (var i = 0; i<data[0].trends.length;i++)
+              for (var i = 0; i<data[0].trends.length;i++)
               {
                 if (data[0].trends[i].tweet_volume != null)
                 {
                   console.log(data[0].trends[i]);
                 }  
-              } */
-                console.log(data);
+              } 
+                //console.log(data[0].trends);
               })
             })
           });
