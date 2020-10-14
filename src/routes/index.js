@@ -11,7 +11,8 @@ var fs = require('fs');
 
 router.use(logger('tiny'));
 
-const Twit = require('twit')
+const Twit = require('twit');
+const { Console } = require('console');
  
 const OWMKey = '2d3a57bc337ad27b64c0af674c72edbd';
 var T = new Twit({
@@ -22,32 +23,41 @@ var T = new Twit({
   timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
   strictSSL:            true,     // optional - requires SSL certificates to be valid.
 })
-var rsp;
-var Location = 'America';
+
 /* Render home page. */
-router.get('/', (req, res) => {
-  var CityName_URL = `http://api.openweathermap.org/data/2.5/weather?q=${Location}&appid=${OWMKey}`
-  axios.get(CityName_URL)
-          .then((response) => {
-            const rsp = response.data;
-
-            T.get('trends/closest', { lat: rsp.coord.lat , long: rsp.coord.lon}, function(err, data, response) {
-              var Location_WoeID = data[0].woeid
-              T.get('trends/place', { id: Location_WoeID }, function(err, data, response) {
-              for (var i = 0; i<data[0].trends.length;i++)
-              {
-                if (data[0].trends[i].tweet_volume != null)
-                {
-                  console.log(data[0].trends[i]);
-                }  
-              } 
-                //console.log(data[0].trends);
-              })
-            })
-          });
-
-    
+router.get('/', (req, res) => {  
     res.render('index');
 });
 
+/* Search trending twitter posts */
+router.get('/search', (req, res) => {
+  var CityName_URL = `http://api.openweathermap.org/data/2.5/weather?q=${req.query.location}&appid=${OWMKey}`
+  axios.get(CityName_URL) //used to return longandlat
+    .then(async (response) => {
+      var arr = [];
+      const rsp = response.data;
+      //used to return woeid of a place
+      T.get('trends/closest', { lat: rsp.coord.lat , long: rsp.coord.lon}, async function(err, data, response2) {
+        var Location_WoeID = data[0].woeid;
+        //used to return trending name in the place
+        T.get('trends/place', { id: Location_WoeID }, async function(err, data2, response3) {          
+          //search for the relevant tweets
+          for (var i = 0; i<3; i++)
+          {
+            T.get('search/tweets', { q: JSON.stringify(data2[0].trends[i].name), count: 1 }, function(err, data3, response) {
+              arr.push(data3.statuses[0].text);
+              //arr.push(i);
+              //console.log(data3.statuses[0].text);
+            })      
+          }          
+          })        
+      })      
+      res.send(arr);
+    })
+    .catch(error => {
+      console.log(error);
+      res.render('error', { error });
+    });
+});
+        
 module.exports = router;
