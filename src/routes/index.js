@@ -23,7 +23,7 @@ var T = new Twit({
   strictSSL:            true,     // optional - requires SSL certificates to be valid.
 })
 var rsp;
-var Location = 'America';
+var Location = 'Footscray';
 /* Render home page. */
 router.get('/', (req, res) => {
   var CityName_URL = `http://api.openweathermap.org/data/2.5/weather?q=${Location}&appid=${OWMKey}`
@@ -34,11 +34,39 @@ router.get('/', (req, res) => {
             T.get('trends/closest', { lat: rsp.coord.lat , long: rsp.coord.lon}, function(err, data, response) {
               var Location_WoeID = data[0].woeid
               T.get('trends/place', { id: Location_WoeID }, function(err, data, response) {
+                var mystring = JSON.stringify(data);
+                mystring = mystring.split('#').join('');
+                Json_no_Hash = JSON.parse(mystring);
+              ChartURL = `https://quickchart.io/chart?c={type:'bar',data:{labels:[`
               for (var i = 0; i<data[0].trends.length;i++)
               {
                 if (data[0].trends[i].tweet_volume != null)
                 {
-                  console.log(data[0].trends[i]);
+                  ChartURL = ChartURL + `'` + Json_no_Hash[0].trends[i].name + `'` + `,`;
+                }
+              }
+              ChartURL = ChartURL.slice(0, -1)
+
+
+              ChartURL = ChartURL + `],datasets:[{label:'Users',data:[`
+              for (var i = 0; i<data[0].trends.length;i++)
+              {
+                if (data[0].trends[i].tweet_volume != null)
+                {
+                  ChartURL = ChartURL + Json_no_Hash[0].trends[i].tweet_volume + `,`;
+                }
+              }
+              ChartURL = ChartURL.slice(0, -1)
+              ChartURL = ChartURL + `]}]}}`;
+              
+              console.log(ChartURL);
+              
+              for (var i = 0; i<data[0].trends.length;i++)
+              {
+                if (data[0].trends[i].tweet_volume != null)
+                {
+
+                  //console.log(data[0].trends[i]);
                 }  
               } 
                 //console.log(data[0].trends);
