@@ -34,15 +34,20 @@ router.get('/', (req, res) => {
             T.get('trends/closest', { lat: rsp.coord.lat , long: rsp.coord.lon}, function(err, data, response) {
               var Location_WoeID = data[0].woeid
               T.get('trends/place', { id: Location_WoeID }, function(err, data, response) {
+
+
                 var mystring = JSON.stringify(data);
                 mystring = mystring.split('#').join('');
-                Json_no_Hash = JSON.parse(mystring);
+                data = JSON.parse(mystring);
+
+
+
               ChartURL = `https://quickchart.io/chart?c={type:'bar',data:{labels:[`
               for (var i = 0; i<data[0].trends.length;i++)
               {
                 if (data[0].trends[i].tweet_volume != null)
                 {
-                  ChartURL = ChartURL + `'` + Json_no_Hash[0].trends[i].name + `'` + `,`;
+                  ChartURL = ChartURL + `'` + data[0].trends[i].name + `'` + `,`;
                 }
               }
               ChartURL = ChartURL.slice(0, -1)
@@ -53,7 +58,7 @@ router.get('/', (req, res) => {
               {
                 if (data[0].trends[i].tweet_volume != null)
                 {
-                  ChartURL = ChartURL + Json_no_Hash[0].trends[i].tweet_volume + `,`;
+                  ChartURL = ChartURL + data[0].trends[i].tweet_volume + `,`;
                 }
               }
               ChartURL = ChartURL.slice(0, -1)
