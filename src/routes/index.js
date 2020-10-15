@@ -20,8 +20,7 @@ var T = new Twit({
   timeout_ms: 60 * 1000,  // optional HTTP request timeout to apply to all requests.
   strictSSL: true,     // optional - requires SSL certificates to be valid.
 })
-var rsp;
-var Location = 'Australia';
+
 /* Render home page. */
 router.get('/', (req, res) => {
   res.render('index');
@@ -99,7 +98,6 @@ router.get('/chart', (req, res) => {
           }
           ChartURL = ChartURL.slice(0, -1);
           ChartURL = ChartURL + `]}]}}`;
-          console.log(ChartURL);
           res.send(ChartURL);
         })
       })
