@@ -11,6 +11,7 @@ router.use(logger('tiny'));
 const Twit = require('twit');
 const { Console } = require('console');
 
+
 const OWMKey = '2d3a57bc337ad27b64c0af674c72edbd';
 var T = new Twit({
   consumer_key: '8DEciTD5bVy4HQdSIXRevYFZI',
@@ -29,6 +30,7 @@ router.get('/', (req, res) => {
 
 /* Search trending twitter posts */
 router.get('/search', (req, res) => {
+  var ResultsArray = [];
   var CityName_URL = `http://api.openweathermap.org/data/2.5/weather?q=${req.query.location}&appid=${OWMKey}`
   axios.get(CityName_URL) //used to return longandlat
     .then((response) => {
@@ -38,6 +40,32 @@ router.get('/search', (req, res) => {
         var Location_WoeID = data[0].woeid;
         //used to return trending name in the place
         T.get('trends/place', { id: Location_WoeID }, function (err, data2, response3) {
+
+        //Chart manipulation code can fit here
+
+          var mystring = JSON.stringify(data2);
+          mystring = mystring.split('#').join('');
+          data2 = JSON.parse(mystring);
+
+          ChartURL = `https://quickchart.io/chart?c={type:'bar',data:{labels:[`
+          for (var i = 0; i < data2[0].trends.length; i++) {
+            if (data2[0].trends[i].tweet_volume != null) {
+              ChartURL = ChartURL + `'` + data2[0].trends[i].name + `'` + `,`;
+            }
+          }
+          ChartURL = ChartURL.slice(0, -1)
+
+          ChartURL = ChartURL + `],datasets:[{label:'Users',data:[`
+          for (var i = 0; i < data2[0].trends.length; i++) {
+            if (data2[0].trends[i].tweet_volume != null) {
+              ChartURL = ChartURL + data2[0].trends[i].tweet_volume + `,`;
+            }
+          }
+          ChartURL = ChartURL.slice(0, -1);
+          ChartURL = ChartURL + `]}]}}`;
+          //res.send(ChartURL);
+          ResultsArray.push(ChartURL);
+
           //search for the relevant tweets
           Promise.all(
             data2[0].trends.slice(0, 3).map(trend => {
@@ -54,7 +82,8 @@ router.get('/search', (req, res) => {
               })
             })
           ).then(result => {
-            res.send(result);
+            ResultsArray.push(result)
+            res.send(ResultsArray);
           }).catch(error => {
             console.log(error);
           })
