@@ -1,9 +1,10 @@
-/* Retrieve tweets info */
+/* Show trending twitter posts */
 function showTweet(e) {
     try {
         let input = document.getElementsByClassName("form-control")[0].value;
         $.ajax({
             url: "/search?location=" + input, success: function (result) {
+                //Render twitter posts in html
                 let postDiv = document.getElementsByClassName('post1');
                 postDiv[0].innerHTML = JSON.stringify(result[0]);
                 let postDiv2 = document.getElementsByClassName('post2');
@@ -17,16 +18,19 @@ function showTweet(e) {
     }
 }
 
-/* Retrieve chart info */
+/* Show chart info */
 function showChart(e) {
     try {
         let input = document.getElementsByClassName("form-control")[0].value;
         $.ajax({
             url: "/chart?location=" + input, success: function (result) {
-                let postDiv = document.getElementById('chart');
-                postDiv.src = result;
-                //var ctx = postDiv.getContext("2d");
-                //ctx.drawImage(result, 10, 10);
+                //Render chart in html
+                var image = document.createElement("img");
+                var imageParent = document.getElementById("chart");
+                image.id = "id";
+                image.className = "class";
+                image.src = result;            
+                imageParent.appendChild(image);
             }
         })
     } catch (error) {
