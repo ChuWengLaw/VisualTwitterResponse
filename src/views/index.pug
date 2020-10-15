@@ -3,25 +3,27 @@ extends layout
 block content
   .jumbotron.text-center
     h1 Visual Twitter Response
-    p Usage: Input keywords to search for top twitter posts and the average sentimental score of the posts.
-    p Example: #Trump#Covid-19 
+    p Usage: Input locations to search for top twitter posts and the average sentimental score of the posts.
+    p Example: #Brisbane 
   .container
-    .form-group
-      label(for='query' style="font-size:26px") Search Twitter posts with keywords:
-      input#query.form-control(type='text' placeholder='#key#key#key')
-      button.btn.btn-primary(type='button' onclick='showTweet()') Search
-    .row      
-      .col-sm-4
-        h3 1st post
-        .post1
-      .col-sm-4
-        h3 2nd post
-        .post2
-      .col-sm-4
-        h3 3rd post
-        .post3
+    label(for='query' style="font-size:24px") Search trending Twitter posts in a location:
+    .input-group
+      input.form-control(type='text' placeholder="#Brisbane")
+      span.input-group-btn
+        button.btn.btn-primary(type='button' onclick='showTweet()') Search
     p(style='white-space:pre;')
-    button.btn.btn-info(data-toggle='collapse' data-target='#chart') Show Chart
+    label(style="font-size:18px" text-align="right") Trending twitter
+    .row   
+      .col-sm-4
+        blockquote  
+          .post1
+      .col-sm-4
+        blockquote  
+          .post2
+      .col-sm-4
+        blockquote  
+          .post3
+    p(style='white-space:pre;')
+    button.btn.btn-info(data-toggle='collapse' data-target='#chart' onclick='showChart()') Show Chart
     #chart.collapse
-      |This will be our chart
       
