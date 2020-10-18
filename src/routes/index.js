@@ -78,8 +78,8 @@ router.get('/search', (req, res) => {
               })
             })
           ).then(result => {
-            var test = JSON.stringify({ url: ChartURL, result, });
-            res.send(test);
+            var JSONResults = JSON.stringify({ url: ChartURL, result, });
+            res.send(JSONResults);
           }).catch(error => {
             console.log(error);
           })
