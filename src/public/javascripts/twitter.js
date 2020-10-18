@@ -4,14 +4,15 @@ function showTweet(e) {
         let input = document.getElementsByClassName("form-control")[0].value;
         $.ajax({
             url: "/search?location=" + input, success: function (result) {
-                console.log(result[0])
+                var JSONResult = JSON.parse(result);
+                console.log(JSONResult.url);
                 //Render twitter posts in html
                 let postDiv = document.getElementsByClassName('post1');
-                postDiv[0].innerHTML = JSON.stringify(result[1][0]);
+                postDiv[0].innerHTML = JSON.stringify(JSONResult.result[0]);
                 let postDiv2 = document.getElementsByClassName('post2');
-                postDiv2[0].innerHTML = JSON.stringify(result[1][1]);
+                postDiv2[0].innerHTML = JSON.stringify(JSONResult.result[1]);
                 let postDiv3 = document.getElementsByClassName('post3');
-                postDiv3[0].innerHTML = JSON.stringify(result[1][2]);
+                postDiv3[0].innerHTML = JSON.stringify(JSONResult.result[2]);
 
                 //chart test
                 
@@ -19,10 +20,9 @@ function showTweet(e) {
                 var imageParent = document.getElementById("chart");
                 image.id = "id";
                 image.className = "class";
-                image.src = result[0];            
+                image.src = JSONResult.url;            
                 imageParent.appendChild(image);
                 
-
             }
         })
     } catch (error) {
