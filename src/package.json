@@ -6,14 +6,17 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "aws-sdk": "^2.773.0",
     "axios": "^0.20.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^8.2.0",
     "es6-promise": "^4.2.8",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "pug": "2.0.0-beta11",
+    "redis": "^3.0.2",
     "twit": "^2.2.11"
   }
 }

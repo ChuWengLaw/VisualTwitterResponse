@@ -107,7 +107,7 @@ router.get('/search', (req, res) => {
                            ChartURL = ChartURL + `]}]}}`;
                            //res.send(ChartURL);
                            ResultsArray.push(ChartURL);
-                 
+                           
                            //search for the relevant tweets
                            Promise.all(
                              data2[0].trends.slice(0, 3).map(trend => {
