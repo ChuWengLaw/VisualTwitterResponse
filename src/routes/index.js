@@ -30,7 +30,6 @@ router.get('/', (req, res) => {
 
 /* Search trending twitter posts */
 router.get('/search', (req, res) => {
-  var ResultsArray = [];
   var CityName_URL = `http://api.openweathermap.org/data/2.5/weather?q=${req.query.location}&appid=${OWMKey}`
   axios.get(CityName_URL) //used to return longandlat
     .then((response) => {
@@ -63,8 +62,6 @@ router.get('/search', (req, res) => {
           }
           ChartURL = ChartURL.slice(0, -1);
           ChartURL = ChartURL + `]}]}}`;
-          //res.send(ChartURL);
-          ResultsArray.push(ChartURL);
 
           //search for the relevant tweets
           Promise.all(
@@ -78,12 +75,11 @@ router.get('/search', (req, res) => {
                     reject("Rate limit reached!!");
                   }
                 })
-
               })
             })
           ).then(result => {
-            ResultsArray.push(result)
-            res.send(ResultsArray);
+            var JSONResults = JSON.stringify({ url: ChartURL, result, });
+            res.send(JSONResults);
           }).catch(error => {
             console.log(error);
           })
@@ -95,6 +91,10 @@ router.get('/search', (req, res) => {
       res.render('error', { error });
     });
 });
+
+
+
+
 
 /* Show charts */
 router.get('/chart', (req, res) => {
