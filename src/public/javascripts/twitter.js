@@ -21,8 +21,6 @@ function showTweet(e) {
                 image.className = "class";
                 image.src = result[0];            
                 imageParent.appendChild(image);
-                
-
             }
         })
     } catch (error) {
