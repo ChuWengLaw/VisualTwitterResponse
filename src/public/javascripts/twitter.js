@@ -1,3 +1,5 @@
+const { HttpResponse } = require("aws-sdk");
+
 /* Show trending twitter posts */
 function showTweet(e) {
     try {
@@ -7,7 +9,6 @@ function showTweet(e) {
             //Redirect to router funciton in index.js
             url: "/search?location=" + input, success: function (result) {
                 var JSONResult = JSON.parse(result);
-                console.log(JSONResult.url);
 
                 //Render twitter posts in html
                 let postDiv = document.getElementsByClassName('post1');
