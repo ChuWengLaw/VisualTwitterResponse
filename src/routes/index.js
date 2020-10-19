@@ -43,31 +43,6 @@ bucketPromise.then(function (data) {
     console.error(err, err.stack);
   });
 
-// This section will change for Cloud Services  
-const redisClient = redis.createClient();
-
-redisClient.on('error', (err) => {
-  console.log("Error " + err);
-});
-
-
-var redisClient = redis.createClient(3000, 'hostname', {no_ready_check: true});
-redisClient.auth('password', function (err) {
-    if (err) throw err;
-});
-
-redisClient.on('error', function (err) {
-    console.log('Error ' + err);
-}); 
-
-redisClient.on('connect', function() {
-    console.log('Connected to Redis');
-});
-
-
-
-
-
 
 /* Render home page. */
 router.get('/', (req, res) => {
@@ -79,25 +54,13 @@ router.get('/search', (req, res) => {
   var CityName_URL = `http://api.openweathermap.org/data/2.5/weather?q=${req.query.location}&appid=${OWMKey}`
   const redisKey = `twitter:${req.query.location}`;
   const s3Key = `twitter:${req.query.location}`;
-
-  // Try the cache   
-  return redisClient.get(redisKey, (err, result) => {
-    if (result) {
-      // Serve from Cache    
-      console.log("Served from Cache");
-      return res.send(result);
-    } else {//check S3 
       const params = { Bucket: bucketName, Key: s3Key };
 
       return new AWS.S3({ apiVersion: '2006-03-01' }).getObject(params, (err, result) => {
         if (result) {
           // Serve from S3 save into cache
-          console.log("Served from S3");
-          //save into cache
-          //S3 stores as a weird value so JSON it then string it to be compatible with redis.  
+          console.log('served from S3');
           var cacheStore = JSON.stringify(JSON.parse(result.Body));
-          //console.log(cacheStore);
-          redisClient.setex(redisKey, 3600, cacheStore);
           return res.send(cacheStore);
         } else {
           // Serve from Wikipedia API and store in S3, and store in cache
@@ -155,7 +118,7 @@ router.get('/search', (req, res) => {
 
                       const objectParams = { Bucket: bucketName, Key: s3Key, Body: JSONResult };
                       const uploadPromise = new AWS.S3({ apiVersion: '2006-03-01' }).putObject(objectParams).promise();
-                      redisClient.setex(redisKey, 3600, JSONResult);
+                      //redisClient.setex(redisKey, 3600, JSONResult);
                       uploadPromise.then(function (data) {
                         console.log("Successfully uploaded data to " + bucketName + "/" + s3Key);
                       });
@@ -176,8 +139,7 @@ router.get('/search', (req, res) => {
             });
         }
       });
-    }
-  });
+    
 });
 
 
