@@ -22,7 +22,7 @@ bucketPromise.then(function(data) {
 // This section will change for Cloud Services  
 const redisClient = redis.createClient(); 
  
-redisClient.on('error', (err) => {   
+redisClient.on('error', (err) => {  
     console.log("Error " + err); 
 });
 
@@ -47,7 +47,7 @@ app.get('/api/search', (req, res) => {
                 return new AWS.S3({apiVersion: '2006-03-01'}).getObject(params, (err, result) => {
                     if (result) {
                         // Serve from S3 save into cache
-                        console.log(result);
+                        //console.log(result);
                         const resultJSON = JSON.parse(result.Body);
                         //save into cache
                         redisClient.setex(redisKey, 3600, JSON.stringify({ source: 'Redis Cache', resultJSON, }));           
