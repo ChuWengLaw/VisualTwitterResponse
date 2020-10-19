@@ -62,8 +62,6 @@ router.get('/search', (req, res) => {
   const redisKey = `twitter:${req.query.location}`; 
   const s3Key = `twitter:${req.query.location}`;
   
-  
-
      // Try the cache   
      return redisClient.get(redisKey, (err, result) => {          
       if (result) {       
@@ -76,8 +74,7 @@ router.get('/search', (req, res) => {
              return new AWS.S3({apiVersion: '2006-03-01'}).getObject(params, (err, result) => {
                  if (result) {
                     // Serve from S3 save into cache
-                    //console.log(result);
-                    console.log("Served from S3"); 
+                    console.log("Served from S3");
                     //save into cache
                     //S3 stores as a weird value so JSON it then string it to be compatible with redis.  
                     var cacheStore = JSON.stringify(JSON.parse(result.Body));
