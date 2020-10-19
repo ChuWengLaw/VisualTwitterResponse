@@ -4,11 +4,11 @@ block content
   .jumbotron.text-center
     h1 Visual Twitter Response
     p Usage: Input locations to search for top twitter posts and the average sentimental score of the posts.
-    p Example: #Brisbane 
+    p Example: Brisbane 
   .container
     label(for='query' style="font-size:24px") Search trending Twitter posts in a location:
     .input-group
-      input.form-control(type='text' placeholder="#Brisbane")
+      input.form-control(type='text' placeholder="Brisbane")
       span.input-group-btn
         button.btn.btn-primary(type='button' onclick='showTweet()') Search
     p(style='white-space:pre;')
@@ -24,6 +24,5 @@ block content
         blockquote  
           .post3
     p(style='white-space:pre;')
-    button.btn.btn-info(data-toggle='collapse' data-target='#chart' onclick='showChart()') Show Chart
     #chart
       
