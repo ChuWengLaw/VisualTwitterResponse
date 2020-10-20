@@ -18,6 +18,7 @@ const { Console } = require('console');
 
 // Natural Language Processing
 var natural = require('natural');
+var tokenizer = new natural.WordTokenizer();
 var Analyzer = natural.SentimentAnalyzer;
 var stemmer = natural.PorterStemmer;
 var analyzer = new Analyzer("English", stemmer, "afinn");
@@ -134,10 +135,10 @@ router.get('/search', (req, res) => {
                     })
                   ).then(result => {
                     // process the twitter with sentimental analysis
-                    var score1 = analyzer.getSentiment(result[0]);
-                    var score2 = analyzer.getSentiment(result[1]);
-                    var score3 = analyzer.getSentiment(result[2]);
-                    var scorearr = score1;
+                    var score1 = analyzer.getSentiment(tokenizer.tokenize(result[0]));
+                    var score2 = analyzer.getSentiment(tokenizer.tokenize(result[1]));
+                    var score3 = analyzer.getSentiment(tokenizer.tokenize(result[2]));
+                    var scorearr = [score1, score2, score3];
 
                     // push the scores into json to send to ajax
                     var JSONResult = JSON.stringify({ url: ChartURL, result, score: scorearr});
