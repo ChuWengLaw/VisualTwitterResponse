@@ -29,7 +29,6 @@ function showTweet(e) {
                 imageParent.appendChild(image);
 
                 //Render sentimental scores in html
-                console.log(JSONResult.score);
                 let score1 = document.getElementsByClassName('score1');
                 score1[0].innerHTML = JSON.stringify(JSONResult.score[0]);
                 let score2 = document.getElementsByClassName('score2');
