@@ -98,7 +98,7 @@ router.get('/search', (req, res) => {
                            mystring = mystring.split('#').join('');
                            data2 = JSON.parse(mystring);
                  
-                           ChartURL = `https://quickchart.io/chart?c={type:'bar',data:{labels:[`
+                           ChartURL = `https://quickchart.io/chart?c={type:'bar',data:{labels:[`;
                            for (var i = 0; i < data2[0].trends.length; i++) {
                              if (data2[0].trends[i].tweet_volume != null) {
                                ChartURL = ChartURL + `'` + data2[0].trends[i].name + `'` + `,`;
