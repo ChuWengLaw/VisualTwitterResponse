@@ -6,6 +6,7 @@ const router = express.Router();
 router.use(logger('tiny'));
 
 // Persistence
+var RedisClustr = require('redis-clustr');
 const redis = require('redis');
 require('dotenv').config();
 const AWS = require('aws-sdk');
@@ -49,9 +50,26 @@ bucketPromise.then(function (data) {
 
 // ElastiCache 
 const elasticachehost = "callumlawelastiredis.km2jzi.clustercfg.apse2.cache.amazonaws.com";
-const elasticacheport = 6379;
+const elasticacheport = "6379";
 
-const redisClient = redis.createClient(elasticacheport, elasticachehost, {no_ready_check: true});
+//const redisClient = redis.createClient(elasticacheport, elasticachehost);
+var redisClient = new RedisClustr({
+  servers: [
+      {
+          host: elasticachehost,
+          port: elasticacheport
+      }
+  ],
+  createClient: function (port, host) {
+      // this is the default behaviour
+      return redis.createClient(port, host);
+  }
+});
+
+//connect to redis
+redisClient.on("connect", function () {
+  console.log("connected");
+});
 
 redisClient.on('error', (err) => {
   console.log("Error " + err);
