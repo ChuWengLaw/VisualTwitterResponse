@@ -28,8 +28,14 @@ function showTweet(e) {
                 image.src = JSONResult.url;
                 imageParent.appendChild(image);
 
-                //Render sentimental scores
+                //Render sentimental scores in html
                 console.log(JSONResult.score);
+                let score1 = document.getElementsByClassName('score1');
+                postDiv[0].innerHTML = JSON.stringify(JSONResult.score[0]);
+                let score2 = document.getElementsByClassName('score2');
+                postDiv2[0].innerHTML = JSON.stringify(JSONResult.score[1]);
+                let score3 = document.getElementsByClassName('score3');
+                postDiv3[0].innerHTML = JSON.stringify(JSONResult.score[2]);
             }
         })
     } catch (error) {

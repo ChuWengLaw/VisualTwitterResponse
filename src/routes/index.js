@@ -135,7 +135,6 @@ router.get('/search', (req, res) => {
                     })
                   ).then(result => {
                     // process the twitter with sentimental analysis
-                    console.log(result);
                     var score1 = analyzer.getSentiment(tokenizer.tokenize(result[0]));
                     var score2 = analyzer.getSentiment(tokenizer.tokenize(result[1]));
                     var score3 = analyzer.getSentiment(tokenizer.tokenize(result[2]));
