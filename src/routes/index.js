@@ -47,8 +47,11 @@ bucketPromise.then(function (data) {
     console.error(err, err.stack);
   });
 
-// This section will change for Cloud Services  
-const redisClient = redis.createClient();
+// ElastiCache 
+const elasticachehost = "callumlawelastiredis.km2jzi.clustercfg.apse2.cache.amazonaws.com";
+const elasticacheport = 6379;
+
+const redisClient = redis.createClient(elasticacheport, elasticachehost, {no_ready_check: true});
 
 redisClient.on('error', (err) => {
   console.log("Error " + err);
