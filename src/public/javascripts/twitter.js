@@ -1,5 +1,3 @@
-const { HttpResponse } = require("aws-sdk");
-
 /* Show trending twitter posts */
 function showTweet(e) {
     try {

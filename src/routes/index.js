@@ -135,9 +135,9 @@ router.get('/search', (req, res) => {
                   ).then(result => {
                     // process the twitter with sentimental analysis
                     var score1 = analyzer.getSentiment(result[0]);
-                    var score2 = analyzer.getSentiment(result[0]);
-                    var score3 = analyzer.getSentiment(result[0]);
-                    var scorearr = [score1, score2, score3];
+                    var score2 = analyzer.getSentiment(result[1]);
+                    var score3 = analyzer.getSentiment(result[2]);
+                    var scorearr = score1;
 
                     // push the scores into json to send to ajax
                     var JSONResult = JSON.stringify({ url: ChartURL, result, score: scorearr});
