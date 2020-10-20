@@ -20,7 +20,7 @@ function showTweet(e) {
 
                 //Render chart in html
                 var imageParent = document.getElementById("chart");
-                // remove all child nodes
+                //remove all child nodes
                 while (imageParent.hasChildNodes()) {
                     imageParent.removeChild(imageParent.lastChild);
                 }
@@ -29,6 +29,9 @@ function showTweet(e) {
                 image.className = "class";
                 image.src = JSONResult.url;
                 imageParent.appendChild(image);
+
+                //Render sentimental scores
+                console.log(JSONResult.score);
             }
         })
     } catch (error) {
