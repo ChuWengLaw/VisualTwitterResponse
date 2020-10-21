@@ -183,6 +183,7 @@ router.get('/search', (req, res) => {
                     return res.send(JSONResult);
                   }).catch(error => {
                     console.log(error);
+                    res.send("");
                   })
                 })
               })
