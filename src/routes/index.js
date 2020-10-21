@@ -118,27 +118,27 @@ router.get('/search', (req, res) => {
                   mystring = mystring.split('#').join('');
                   data2 = JSON.parse(mystring);
                   var volume_trends = 0;
-                  var ChartURLVolumeTweets = `https://quickchart.io/chart?c={type:'bar',data:{labels:[`
+                  ChartURL = `https://quickchart.io/chart?c={type:'bar',data:{labels:[`
                   for (var i = 0; i < data2[0].trends.length; i++) {
                     if (data2[0].trends[i].tweet_volume != null) {
                       volume_trends = volume_trends + 1;
-                      ChartURLVolumeTweets = ChartURLVolumeTweets + `'` + data2[0].trends[i].name + `'` + `,`;
+                      ChartURL = ChartURL + `'` + data2[0].trends[i].name + `'` + `,`;
                     }
                   }
-                  ChartURLVolumeTweets = ChartURLVolumeTweets.slice(0, -1)
+                  ChartURL = ChartURL.slice(0, -1)
 
-                  ChartURLVolumeTweets = ChartURLVolumeTweets + `],datasets:[{label:'Users',data:[`
+                  ChartURL = ChartURL + `],datasets:[{label:'Users',data:[`
                   for (var i = 0; i < data2[0].trends.length; i++) {
                     if (data2[0].trends[i].tweet_volume != null) {
-                      ChartURLVolumeTweets = ChartURLVolumeTweets + data2[0].trends[i].tweet_volume + `,`;
+                      ChartURL = ChartURL + data2[0].trends[i].tweet_volume + `,`;
                     }
                   }
-                  ChartURLVolumeTweets = ChartURLVolumeTweets.slice(0, -1);
-                  ChartURLVolumeTweets = ChartURLVolumeTweets + `]}]}}`;
+                  ChartURL = ChartURL.slice(0, -1);
+                  ChartURL = ChartURL + `]}]}}`;
 
                   if (volume_trends == 0)
                   {
-                    ChartURLVolumeTweets = `https://quickchart.io/chart?c={type:'bar',data:{labels:[],datasets:[{label:'No Trends to Show',data:[]}]}}`
+                    ChartURL = `https://quickchart.io/chart?c={type:'bar',data:{labels:[],datasets:[{label:'No Trends to Show',data:[]}]}}`
                   }
                   var trendtopic = [];
                   var scorearr = [];
@@ -169,38 +169,8 @@ router.get('/search', (req, res) => {
                       })
                     })
                   ).then(result => {
-                    //Create Bar graph of sentiments
-                    var ChartSentiment = `https://quickchart.io/chart?c={type:'bar',data:{labels:['Negative','Neutral','Positive'], datasets:[{label:'`;
-                    for (i = 0; i<3;i++)
-                    {
-                      var numpos = 0;
-                      var numneg = 0;
-                      var numneutral = 0;
-                      ChartSentiment = ChartSentiment+trendtopic[i];
-                      for (j = 0; j<100;j++)
-                      {
-                        if(scorearr[100*i+j] > 0){
-                          numpos++;
-                        }
-                        else if (scorearr[100*i+j] < 0){
-                          numneg++;
-                        }
-                        else{
-                          numneutral++;
-                        }
-                      }
-                      if (i!=2)
-                      {
-                        ChartSentiment = ChartSentiment + `',data:[${numneg},${numneutral},${numpos}]},{label:'`;
-                      }
-                      else{
-                        ChartSentiment = ChartSentiment + `',data:[${numneg},${numneutral},${numpos}]}]}}`;
-                      }
-                    }
-
-
                     // push the scores into json to send to ajax
-                    var JSONResult = JSON.stringify({ url: ChartURLVolumeTweetsVolumeTweets,sentchart: ChartSentiment, result, score: scorearr, topic: trendtopic, rating: avg_rate});
+                    var JSONResult = JSON.stringify({ url: ChartURL, result, score: scorearr, topic: trendtopic, rating: avg_rate});
                     
                     // check that it serves from twitter and save in redis and S3
                     console.log("Served from Twitter");
