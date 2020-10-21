@@ -127,7 +127,7 @@ router.get('/search', (req, res) => {
                   }
                   ChartURL = ChartURL.slice(0, -1)
 
-                  ChartURL = ChartURL + `],datasets:[{label:'Users',data:[`
+                  ChartURL = ChartURL + `],datasets:[{label:'Amount of Tweets',data:[`
                   for (var i = 0; i < data2[0].trends.length; i++) {
                     if (data2[0].trends[i].tweet_volume != null) {
                       ChartURL = ChartURL + data2[0].trends[i].tweet_volume + `,`;

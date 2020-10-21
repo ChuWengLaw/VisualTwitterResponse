@@ -24,6 +24,18 @@ function showTweet(e) {
                 let postDiv3 = document.getElementsByClassName('post3');
                 postDiv3[0].innerHTML = JSON.stringify(JSONResult.result[2]);
 
+                //Render sent chart in html
+                var imagesentParent = document.getElementById("sentchart");
+                //remove all child nodes
+                while (imagesentParent.hasChildNodes()) {
+                    imagesentParent.removeChild(imagesentParent.lastChild);
+                }
+                var imagesent = document.createElement("img");                
+                imagesent.id = "id";
+                imagesent.className = "class";
+                imagesent.src = JSONResult.sentchart;
+                imagesentParent.appendChild(imagesent);
+
                 //Render chart in html
                 var imageParent = document.getElementById("chart");
                 //remove all child nodes
