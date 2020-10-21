@@ -118,7 +118,7 @@ router.get('/search', (req, res) => {
                   mystring = mystring.split('#').join('');
                   data2 = JSON.parse(mystring);
                   var volume_trends = 0;
-                  ChartURLVolumeTweets = `https://quickchart.io/chart?c={type:'bar',data:{labels:[`
+                  var ChartURLVolumeTweets = `https://quickchart.io/chart?c={type:'bar',data:{labels:[`
                   for (var i = 0; i < data2[0].trends.length; i++) {
                     if (data2[0].trends[i].tweet_volume != null) {
                       volume_trends = volume_trends + 1;
@@ -170,12 +170,12 @@ router.get('/search', (req, res) => {
                     })
                   ).then(result => {
                     //Create Bar graph of sentiments
-                    ChartSentiment = `https://quickchart.io/chart?c={type:'bar',data:{labels:['Negative','Neutral','Positive'], datasets:[{label:'`;
+                    var ChartSentiment = `https://quickchart.io/chart?c={type:'bar',data:{labels:['Negative','Neutral','Positive'], datasets:[{label:'`;
                     for (i = 0; i<3;i++)
                     {
-                      numpos = 0;
-                      numneg = 0;
-                      numneutral = 0;
+                      var numpos = 0;
+                      var numneg = 0;
+                      var numneutral = 0;
                       ChartSentiment = ChartSentiment+trendtopic[i];
                       for (j = 0; j<100;j++)
                       {
