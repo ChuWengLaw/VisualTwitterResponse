@@ -169,6 +169,35 @@ router.get('/search', (req, res) => {
                       })
                     })
                   ).then(result => {
+                    var ChartSentiment = `https://quickchart.io/chart?c={type:'bar',data:{labels:['Negative','Neutral','Positive'], datasets:[{label:'`;
+                    for (i = 0; i<3;i++)
+                    {
+                      var numpos = 0;
+                      var numneg = 0;
+                      var numneutral = 0;
+                      ChartSentiment = ChartSentiment+trendtopic[i];
+                      for (j = 0; j<100;j++)
+                      {
+                        if(scorearr[100*i+j] > 0){
+                          numpos++;
+                        }
+                        else if (scorearr[100*i+j] < 0){
+                          numneg++;
+                        }
+                        else{
+                          numneutral++;
+                        }
+                      }
+                      if (i!=2)
+                      {
+                        ChartSentiment = ChartSentiment + `',data:[${numneg},${numneutral},${numpos}]},{label:'`;
+                      }
+                      else{
+                        ChartSentiment = ChartSentiment + `',data:[${numneg},${numneutral},${numpos}]}]}}`;
+                      }
+                    }
+
+
                     // push the scores into json to send to ajax
                     var JSONResult = JSON.stringify({ url: ChartURL, result, score: scorearr, topic: trendtopic, rating: avg_rate});
                     
