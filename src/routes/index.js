@@ -83,10 +83,7 @@ router.get('/', (req, res) => {
 /* Search trending twitter posts */
 router.get('/search', (req, res) => {
   var CityName_URL = `http://api.openweathermap.org/data/2.5/weather?q=${req.query.location}&appid=${OWMKey}`
-  // Remove space from country name for redis
-  var temp = `${req.query.location}`;
-  var country = temp.replace(" ", "");
-  const redisKey = `twitter:${country}`;
+  const redisKey = `twitter:${req.query.location}`;
   const s3Key = `twitter:${req.query.location}`;
 
   // Try the cache   
@@ -140,6 +137,11 @@ router.get('/search', (req, res) => {
                   ChartURL = ChartURL.slice(0, -1);
                   ChartURL = ChartURL + `]}]}}`;
 
+                  if (data2[0].trends.length == 0)
+                  {
+                    ChartURL = `https://quickchart.io/chart?c={type:'bar',data:{labels:[],datasets:[{label:'No Trends to Show',data:[]}]}}`
+                  }
+
                   // search for the relevant tweets
                   Promise.all(
                     data2[0].trends.slice(0, 3).map(trend => {
@@ -178,7 +180,6 @@ router.get('/search', (req, res) => {
                     return res.send(JSONResult);
                   }).catch(error => {
                     console.log(error);
-                    res.render('error', { error });
                   })
                 })
               })
