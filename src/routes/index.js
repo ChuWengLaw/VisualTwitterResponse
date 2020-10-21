@@ -49,7 +49,7 @@ bucketPromise.then(function (data) {
   });
 
 // ElastiCache 
-const elasticachehost = "callumlawelastiredis.km2jzi.clustercfg.apse2.cache.amazonaws.com";
+const elasticachehost = "callumlawredis.km2jzi.clustercfg.apse2.cache.amazonaws.com";
 const elasticacheport = "6379";
 
 //const redisClient = redis.createClient(elasticacheport, elasticachehost);
