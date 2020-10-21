@@ -199,7 +199,7 @@ router.get('/search', (req, res) => {
 
 
                     // push the scores into json to send to ajax
-                    var JSONResult = JSON.stringify({ url: ChartURL, result, score: scorearr, topic: trendtopic, rating: avg_rate});
+                    var JSONResult = JSON.stringify({ url: ChartURL, sentchart: ChartSentiment, result, score: scorearr, topic: trendtopic, rating: avg_rate});
                     
                     // check that it serves from twitter and save in redis and S3
                     console.log("Served from Twitter");
