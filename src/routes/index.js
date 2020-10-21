@@ -179,8 +179,8 @@ router.get('/search', (req, res) => {
               })
             })
             .catch(error => {
-              console.log(error);
-              res.render('error', { error });
+              console.log("Invalid input");
+              res.send("");
             });
         }
       });
@@ -188,6 +188,7 @@ router.get('/search', (req, res) => {
   });
 });
 
+// Chart for the tweetvolumes of different topics
 function TweetVolume(data2) {
   var volume_trends = 0;
   //Create url to show chart
@@ -218,6 +219,7 @@ function TweetVolume(data2) {
   return ChartURL;
 }
 
+// Chart of the overall sentimental score of the topics
 function sentChart(scorearr, trendtopic) {
   //setup chart url
   var ChartSentiment = `https://quickchart.io/chart?c={type:'bar',data:{labels:['Negative','Neutral','Positive'], datasets:[{label:'`;

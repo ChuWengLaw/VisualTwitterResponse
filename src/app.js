@@ -1,22 +1,3 @@
-/*
-Callum
-Twitter
-  Consumer Keys
-  API KEY:  8DEciTD5bVy4HQdSIXRevYFZI 
-  secret key: lW1I6Sc3xMxDv8QNqz3Pbefe5ANbVTa91ldonJFxpii95IVHAv
-
-  Auth
-  bearer token: AAAAAAAAAAAAAAAAAAAAANpSIgEAAAAA9nGL%2FC2daCSOKX6TC4jMVYMDwvc%3D3a4Ak9TiKvRn98ceC2yII7w0zTqp3ollbO3xAmGRODDTR2b4Sn
-  Access token:1072388204534292480-4f6rYbuBeZ9r00Ry6xkaa5bW2Qj5eX
-  Access token secret:0qdK02JjKNjerysctpWgVFUU3Dvn1jJqwtmsIr1uiJICS
-Yahoo
-  App ID
-  TpM6S1vE
-  Client ID (Consumer Key)
-  dj0yJmk9eVZkcWg4YUQ3OE5YJmQ9WVdrOVZIQk5ObE14ZGtVbWNHbzlNQT09JnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PTgx
-  Client Secret (Consumer Secret)
-  77ddb53322eac9de860d4bda5a3d2d9a784422f2
-*/
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -25,8 +6,6 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
-
 
 var app = express();
 
