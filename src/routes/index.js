@@ -49,7 +49,7 @@ bucketPromise.then(function (data) {
   });
 
 // ElastiCache 
-const elasticachehost = "callumlawelastiredis.km2jzi.clustercfg.apse2.cache.amazonaws.com";
+const elasticachehost = "callumlawredis.km2jzi.clustercfg.apse2.cache.amazonaws.com";
 const elasticacheport = "6379";
 
 //const redisClient = redis.createClient(elasticacheport, elasticachehost);
@@ -105,7 +105,6 @@ router.get('/search', (req, res) => {
           //save into cache
           //S3 stores as a weird value so JSON it then string it to be compatible with redis.  
           var cacheStore = JSON.stringify(JSON.parse(result.Body));
-          //console.log(cacheStore);
           redisClient.setex(redisKey, 3600, cacheStore);
           return res.send(cacheStore);
         } else {
@@ -120,7 +119,6 @@ router.get('/search', (req, res) => {
                 T.get('trends/place', { id: Location_WoeID }, function (err, data2, response3) {
 
                   //Chart manipulation code can fit here
-
                   var mystring = JSON.stringify(data2);
                   mystring = mystring.split('#').join('');
                   data2 = JSON.parse(mystring);
@@ -148,7 +146,6 @@ router.get('/search', (req, res) => {
                       return new Promise((resolve, reject) => {
                         T.get('search/tweets', { q: JSON.stringify(trend.name), count: 1 }, function (err, data3, response) {
                           try {
-                            console.log(data3);
                             //do this first then send to ajax
                             resolve(data3.statuses[0].text);
                           } catch (err) {
