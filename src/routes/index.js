@@ -94,7 +94,6 @@ router.get('/search', (req, res) => {
       return res.send(result);
     } else {//check S3 
       const params = { Bucket: bucketName, Key: s3Key };
-
       return new AWS.S3({ apiVersion: '2006-03-01' }).getObject(params, (err, result) => {
         if (result) {
           // Serve from S3 save into cache
@@ -114,7 +113,6 @@ router.get('/search', (req, res) => {
                 var Location_WoeID = data[0].woeid;
                 //used to return trending name in the place
                 T.get('trends/place', { id: Location_WoeID }, function (err, data2, response3) {
-
                   //Chart manipulation code can fit here
                   var mystring = JSON.stringify(data2);
                   mystring = mystring.split('#').join('');
@@ -150,18 +148,16 @@ router.get('/search', (req, res) => {
                     data2[0].trends.slice(0, 3).map(trend => {
                       return new Promise((resolve, reject) => {
                         T.get('search/tweets', { q: JSON.stringify(trend.name), count: 100 }, function (err, data3, response) {
-                          try {
-                            var rate = 0;
+                          try {                            
                             //do this first then send to ajax
-                            console.log(data3);
                             trendtopic.push(trend.name);
-                            // process the twitter with sentimental analysis                            
+                            // process the twitter with sentimental analysis
+                            var rate = 0;                      
                             for (i = 0; i < 100; i++) {
                               var score = analyzer.getSentiment(tokenizer.tokenize(data3.statuses[i].text));
                               scorearr.push(score);
                               rate = rate + score;                             
                             } 
-                            console.log(scorearr);
                             rate = rate/100;
                             avg_rate.push(rate);
                             resolve(data3.statuses[0].text);                            
