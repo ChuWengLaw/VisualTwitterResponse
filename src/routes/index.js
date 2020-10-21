@@ -142,7 +142,7 @@ router.get('/search', (req, res) => {
                   {
                     ChartURL = `https://quickchart.io/chart?c={type:'bar',data:{labels:[],datasets:[{label:'No Trends to Show',data:[]}]}}`
                   }
-
+                  var trendtopic = [];
                   // search for the relevant tweets
                   Promise.all(
                     data2[0].trends.slice(0, 3).map(trend => {
@@ -151,6 +151,7 @@ router.get('/search', (req, res) => {
                           try {
                             //do this first then send to ajax
                             console.log(data3);
+                            trendtopic.push(trend.name);
                             resolve(data3.statuses[0].text);                            
                           } catch (err) {
                             console.log(err);
@@ -167,7 +168,7 @@ router.get('/search', (req, res) => {
                     var scorearr = [score1, score2, score3];
 
                     // push the scores into json to send to ajax
-                    var JSONResult = JSON.stringify({ url: ChartURL, result, score: scorearr});
+                    var JSONResult = JSON.stringify({ url: ChartURL, result, score: scorearr, topic: trendtopic});
                     
                     // check that it serves from twitter and save in redis and S3
                     console.log("Served from Twitter");
