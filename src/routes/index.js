@@ -150,11 +150,11 @@ router.get('/search', (req, res) => {
                         T.get('search/tweets', { q: JSON.stringify(trend.name), count: 1 }, function (err, data3, response) {
                           try {
                             //do this first then send to ajax
-                            resolve(data3.statuses[0].text);
+                            console.log(data3);
+                            resolve(data3.statuses[0].text);                            
                           } catch (err) {
                             console.log(err);
-                            res.send("");
-                            
+                            res.send("");                            
                           }
                         })
                       })
