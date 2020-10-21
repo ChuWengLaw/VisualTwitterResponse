@@ -179,10 +179,10 @@ router.get('/search', (req, res) => {
                       ChartSentiment = ChartSentiment+trendtopic[i];
                       for (j = 0; j<100;j++)
                       {
-                        if(scorearr[i] > 0){
+                        if(scorearr[100*i+j] > 0){
                           numpos++;
                         }
-                        else if (scorearr[i] < 0){
+                        else if (scorearr[100*i+j] < 0){
                           numneg++;
                         }
                         else{
