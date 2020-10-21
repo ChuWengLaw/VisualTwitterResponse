@@ -117,29 +117,9 @@ router.get('/search', (req, res) => {
                   var mystring = JSON.stringify(data2);
                   mystring = mystring.split('#').join('');
                   data2 = JSON.parse(mystring);
-                  var volume_trends = 0;
-                  ChartURL = `https://quickchart.io/chart?c={type:'bar',data:{labels:[`
-                  for (var i = 0; i < data2[0].trends.length; i++) {
-                    if (data2[0].trends[i].tweet_volume != null) {
-                      volume_trends = volume_trends + 1;
-                      ChartURL = ChartURL + `'` + data2[0].trends[i].name + `'` + `,`;
-                    }
-                  }
-                  ChartURL = ChartURL.slice(0, -1)
+                  
+                  ChartURL = TweetVolume(data2);
 
-                  ChartURL = ChartURL + `],datasets:[{label:'Amount of Tweets',data:[`
-                  for (var i = 0; i < data2[0].trends.length; i++) {
-                    if (data2[0].trends[i].tweet_volume != null) {
-                      ChartURL = ChartURL + data2[0].trends[i].tweet_volume + `,`;
-                    }
-                  }
-                  ChartURL = ChartURL.slice(0, -1);
-                  ChartURL = ChartURL + `]}]}}`;
-
-                  if (volume_trends == 0)
-                  {
-                    ChartURL = `https://quickchart.io/chart?c={type:'bar',data:{labels:[],datasets:[{label:'No Trends to Show',data:[]}]}}`
-                  }
                   var trendtopic = [];
                   var scorearr = [];
                   var avg_rate = [];
@@ -176,35 +156,7 @@ router.get('/search', (req, res) => {
                       })
                     })
                   ).then(result => {
-                    var ChartSentiment = `https://quickchart.io/chart?c={type:'bar',data:{labels:['Negative','Neutral','Positive'], datasets:[{label:'`;
-                    for (i = 0; i<3;i++)
-                    {
-                      var numpos = 0;
-                      var numneg = 0;
-                      var numneutral = 0;
-                      ChartSentiment = ChartSentiment+trendtopic[i];
-                      for (j = 0; j<100;j++)
-                      {
-                        if(scorearr[100*i+j] > 0){
-                          numpos++;
-                        }
-                        else if (scorearr[100*i+j] < 0){
-                          numneg++;
-                        }
-                        else{
-                          numneutral++;
-                        }
-                      }
-                      if (i!=2)
-                      {
-                        ChartSentiment = ChartSentiment + `',data:[${numneg},${numneutral},${numpos}]},{label:'`;
-                      }
-                      else{
-                        ChartSentiment = ChartSentiment + `',data:[${numneg},${numneutral},${numpos}]}]}}`;
-                      }
-                    }
-
-
+                    ChartSentiment = sentChart(scorearr, trendtopic);
                     // push the scores into json to send to ajax
                     var JSONResult = JSON.stringify({ url: ChartURL, sentchart: ChartSentiment, result, score: scorearr, topic: trendtopic, rating: avg_rate});
                     
@@ -235,5 +187,60 @@ router.get('/search', (req, res) => {
     }
   });
 });
+
+function TweetVolume(data2) {
+  var volume_trends = 0;
+  ChartURL = `https://quickchart.io/chart?c={type:'bar',data:{labels:[`
+  for (var i = 0; i < data2[0].trends.length; i++) {
+    if (data2[0].trends[i].tweet_volume != null) {
+      volume_trends = volume_trends + 1;
+      ChartURL = ChartURL + `'` + data2[0].trends[i].name + `'` + `,`;
+    }
+  }
+  ChartURL = ChartURL.slice(0, -1)
+
+  ChartURL = ChartURL + `],datasets:[{label:'Amount of Tweets',data:[`
+  for (var i = 0; i < data2[0].trends.length; i++) {
+    if (data2[0].trends[i].tweet_volume != null) {
+      ChartURL = ChartURL + data2[0].trends[i].tweet_volume + `,`;
+    }
+  }
+  ChartURL = ChartURL.slice(0, -1);
+  ChartURL = ChartURL + `]}]}}`;
+
+  if (volume_trends == 0) {
+    ChartURL = `https://quickchart.io/chart?c={type:'bar',data:{labels:[],datasets:[{label:'No Trends to Show',data:[]}]}}`
+  }
+  return ChartURL;
+}
+
+function sentChart(scorearr, trendtopic) {
+  var ChartSentiment = `https://quickchart.io/chart?c={type:'bar',data:{labels:['Negative','Neutral','Positive'], datasets:[{label:'`;
+  for (i = 0; i < 3; i++) {
+    var numpos = 0;
+    var numneg = 0;
+    var numneutral = 0;
+    ChartSentiment = ChartSentiment + trendtopic[i];
+    for (j = 0; j < 100; j++) {
+      if (scorearr[100 * i + j] > 0) {
+        numpos++;
+      }
+      else if (scorearr[100 * i + j] < 0) {
+        numneg++;
+      }
+      else {
+        numneutral++;
+      }
+    }
+    if (i != 2) {
+      ChartSentiment = ChartSentiment + `',data:[${numneg},${numneutral},${numpos}]},{label:'`;
+    }
+    else {
+      ChartSentiment = ChartSentiment + `',data:[${numneg},${numneutral},${numpos}]}]}}`;
+    }
+  }
+  return ChartSentiment;
+}
+
 
 module.exports = router;
