@@ -117,7 +117,7 @@ router.get('/search', (req, res) => {
                   var mystring = JSON.stringify(data2);
                   mystring = mystring.split('#').join('');
                   data2 = JSON.parse(mystring);
-                  
+                  //Call function to generate the second graph showing how many tweets about certain trends
                   ChartURL = TweetVolume(data2);
 
                   var trendtopic = [];
@@ -190,37 +190,45 @@ router.get('/search', (req, res) => {
 
 function TweetVolume(data2) {
   var volume_trends = 0;
+  //Create url to show chart
   ChartURL = `https://quickchart.io/chart?c={type:'bar',data:{labels:[`
+  //fill chart with trend names
   for (var i = 0; i < data2[0].trends.length; i++) {
     if (data2[0].trends[i].tweet_volume != null) {
       volume_trends = volume_trends + 1;
       ChartURL = ChartURL + `'` + data2[0].trends[i].name + `'` + `,`;
     }
   }
+  //remove comma placed from for loop after last entry
   ChartURL = ChartURL.slice(0, -1)
-
+  //fill chart with numerical data
   ChartURL = ChartURL + `],datasets:[{label:'Amount of Tweets',data:[`
   for (var i = 0; i < data2[0].trends.length; i++) {
     if (data2[0].trends[i].tweet_volume != null) {
       ChartURL = ChartURL + data2[0].trends[i].tweet_volume + `,`;
     }
   }
+  //remove comma placed from for loop after last entry
   ChartURL = ChartURL.slice(0, -1);
   ChartURL = ChartURL + `]}]}}`;
 
-  if (volume_trends == 0) {
+  if (volume_trends == 0) { //if no trends exist show a chart with no data within and a title stating no trends available
     ChartURL = `https://quickchart.io/chart?c={type:'bar',data:{labels:[],datasets:[{label:'No Trends to Show',data:[]}]}}`
   }
   return ChartURL;
 }
 
 function sentChart(scorearr, trendtopic) {
+  //setup chart url
   var ChartSentiment = `https://quickchart.io/chart?c={type:'bar',data:{labels:['Negative','Neutral','Positive'], datasets:[{label:'`;
+  //loop all three trends
   for (i = 0; i < 3; i++) {
     var numpos = 0;
     var numneg = 0;
     var numneutral = 0;
+    //add trend title
     ChartSentiment = ChartSentiment + trendtopic[i];
+    //cound +/-/0 sentiments to plot
     for (j = 0; j < 100; j++) {
       if (scorearr[100 * i + j] > 0) {
         numpos++;
@@ -232,6 +240,7 @@ function sentChart(scorearr, trendtopic) {
         numneutral++;
       }
     }
+    //insert data into url
     if (i != 2) {
       ChartSentiment = ChartSentiment + `',data:[${numneg},${numneutral},${numpos}]},{label:'`;
     }
