@@ -154,7 +154,8 @@ router.get('/search', (req, res) => {
                             resolve(data3.statuses[0].text);
                           } catch (err) {
                             console.log(err);
-                            reject(res.render('error', { error }));
+                            res.send(NULL);
+                            
                           }
                         })
                       })
