@@ -83,7 +83,10 @@ router.get('/', (req, res) => {
 /* Search trending twitter posts */
 router.get('/search', (req, res) => {
   var CityName_URL = `http://api.openweathermap.org/data/2.5/weather?q=${req.query.location}&appid=${OWMKey}`
-  const redisKey = `twitter:${req.query.location}`;
+  // Remove space from country name for redis
+  var temp = `${req.query.location}`;
+  var country = temp.replace(" ", "");
+  const redisKey = `twitter:${country}`;
   const s3Key = `twitter:${req.query.location}`;
 
   // Try the cache   
@@ -145,6 +148,7 @@ router.get('/search', (req, res) => {
                       return new Promise((resolve, reject) => {
                         T.get('search/tweets', { q: JSON.stringify(trend.name), count: 1 }, function (err, data3, response) {
                           try {
+                            console.log(data3);
                             //do this first then send to ajax
                             resolve(data3.statuses[0].text);
                           } catch (err) {
@@ -177,6 +181,7 @@ router.get('/search', (req, res) => {
                     return res.send(JSONResult);
                   }).catch(error => {
                     console.log(error);
+                    res.render('error', { error });
                   })
                 })
               })
