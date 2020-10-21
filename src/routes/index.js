@@ -139,9 +139,9 @@ router.get('/search', (req, res) => {
                               rate = rate + score;                             
                             } 
                             rate = rate/100;
-                            if (rate < 0) {
+                            if (rate > 0) {
                               rate = "Positive :)";
-                            } else if (rate > 0) {
+                            } else if (rate < 0) {
                               rate = "Negative :("
                             } else {
                               rate = "Neutral :|"
