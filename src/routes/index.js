@@ -139,6 +139,11 @@ router.get('/search', (req, res) => {
                   ChartURL = ChartURL.slice(0, -1);
                   ChartURL = ChartURL + `]}]}}`;
 
+                  if (data2[0].trends.length == 0)
+                  {
+                    ChartURL = `https://quickchart.io/chart?c={type:'bar',data:{labels:[],datasets:[{label:'No Trends to Show',data:[]}]}}`
+                  }
+
                   // search for the relevant tweets
                   Promise.all(
                     data2[0].trends.slice(0, 3).map(trend => {
