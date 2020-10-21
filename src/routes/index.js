@@ -179,8 +179,8 @@ router.get('/search', (req, res) => {
               })
             })
             .catch(error => {
-              console.log(error);
-              res.render('error', { error });
+              console.log("Invalid input");
+              res.send("");
             });
         }
       });
