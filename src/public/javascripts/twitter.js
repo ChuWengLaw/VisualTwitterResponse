@@ -18,7 +18,7 @@ function showTweet(e) {
 
                 //Render chart in html
                 var imageParent = document.getElementById("chart");
-                // remove all child nodes
+                //remove all child nodes
                 while (imageParent.hasChildNodes()) {
                     imageParent.removeChild(imageParent.lastChild);
                 }
@@ -27,6 +27,14 @@ function showTweet(e) {
                 image.className = "class";
                 image.src = JSONResult.url;
                 imageParent.appendChild(image);
+
+                //Render sentimental scores in html
+                let score1 = document.getElementsByClassName('score1');
+                score1[0].innerHTML = JSON.stringify(JSONResult.score[0]);
+                let score2 = document.getElementsByClassName('score2');
+                score2[0].innerHTML = JSON.stringify(JSONResult.score[1]);
+                let score3 = document.getElementsByClassName('score3');
+                score3[0].innerHTML = JSON.stringify(JSONResult.score[2]);
             }
         })
     } catch (error) {
