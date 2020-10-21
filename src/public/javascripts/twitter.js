@@ -38,11 +38,11 @@ function showTweet(e) {
 
                 //Render sentimental scores in html
                 let score1 = document.getElementsByClassName('score1');
-                score1[0].innerHTML = JSON.stringify(JSONResult.score[0]);
+                score1[0].innerHTML = JSON.stringify(JSONResult.rating[0]);
                 let score2 = document.getElementsByClassName('score2');
-                score2[0].innerHTML = JSON.stringify(JSONResult.score[1]);
+                score2[0].innerHTML = JSON.stringify(JSONResult.rating[1]);
                 let score3 = document.getElementsByClassName('score3');
-                score3[0].innerHTML = JSON.stringify(JSONResult.score[2]);
+                score3[0].innerHTML = JSON.stringify(JSONResult.rating[2]);
             }
         })
     } catch (error) {

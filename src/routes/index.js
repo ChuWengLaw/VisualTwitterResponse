@@ -143,15 +143,27 @@ router.get('/search', (req, res) => {
                     ChartURL = `https://quickchart.io/chart?c={type:'bar',data:{labels:[],datasets:[{label:'No Trends to Show',data:[]}]}}`
                   }
                   var trendtopic = [];
+                  var scorearr = [];
+                  var avg_rate = [];
                   // search for the relevant tweets
                   Promise.all(
                     data2[0].trends.slice(0, 3).map(trend => {
                       return new Promise((resolve, reject) => {
-                        T.get('search/tweets', { q: JSON.stringify(trend.name), count: 1 }, function (err, data3, response) {
+                        T.get('search/tweets', { q: JSON.stringify(trend.name), count: 100 }, function (err, data3, response) {
                           try {
+                            var rate = 0;
                             //do this first then send to ajax
                             console.log(data3);
                             trendtopic.push(trend.name);
+                            // process the twitter with sentimental analysis                            
+                            for (i = 0; i < 100; i++) {
+                              var score = analyzer.getSentiment(tokenizer.tokenize(data3.statuses[i].text));
+                              scorearr.push(score);
+                              rate = rate + score;                             
+                            } 
+                            console.log(scorearr);
+                            rate = rate/100;
+                            avg_rate.push(rate);
                             resolve(data3.statuses[0].text);                            
                           } catch (err) {
                             console.log(err);
@@ -161,14 +173,8 @@ router.get('/search', (req, res) => {
                       })
                     })
                   ).then(result => {
-                    // process the twitter with sentimental analysis
-                    var score1 = analyzer.getSentiment(tokenizer.tokenize(result[0]));
-                    var score2 = analyzer.getSentiment(tokenizer.tokenize(result[1]));
-                    var score3 = analyzer.getSentiment(tokenizer.tokenize(result[2]));
-                    var scorearr = [score1, score2, score3];
-
                     // push the scores into json to send to ajax
-                    var JSONResult = JSON.stringify({ url: ChartURL, result, score: scorearr, topic: trendtopic});
+                    var JSONResult = JSON.stringify({ url: ChartURL, result, score: scorearr, topic: trendtopic, rating: avg_rate});
                     
                     // check that it serves from twitter and save in redis and S3
                     console.log("Served from Twitter");
