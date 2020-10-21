@@ -94,7 +94,6 @@ router.get('/search', (req, res) => {
       return res.send(result);
     } else {//check S3 
       const params = { Bucket: bucketName, Key: s3Key };
-
       return new AWS.S3({ apiVersion: '2006-03-01' }).getObject(params, (err, result) => {
         if (result) {
           // Serve from S3 save into cache
@@ -102,7 +101,6 @@ router.get('/search', (req, res) => {
           //save into cache
           //S3 stores as a weird value so JSON it then string it to be compatible with redis.  
           var cacheStore = JSON.stringify(JSON.parse(result.Body));
-          //console.log(cacheStore);
           redisClient.setex(redisKey, 3600, cacheStore);
           return res.send(cacheStore);
         } else {
@@ -115,9 +113,7 @@ router.get('/search', (req, res) => {
                 var Location_WoeID = data[0].woeid;
                 //used to return trending name in the place
                 T.get('trends/place', { id: Location_WoeID }, function (err, data2, response3) {
-
                   //Chart manipulation code can fit here
-
                   var mystring = JSON.stringify(data2);
                   mystring = mystring.split('#').join('');
                   data2 = JSON.parse(mystring);
@@ -144,32 +140,37 @@ router.get('/search', (req, res) => {
                   {
                     ChartURL = `https://quickchart.io/chart?c={type:'bar',data:{labels:[],datasets:[{label:'No Trends to Show',data:[]}]}}`
                   }
-
+                  var trendtopic = [];
+                  var scorearr = [];
+                  var avg_rate = [];
                   // search for the relevant tweets
                   Promise.all(
                     data2[0].trends.slice(0, 3).map(trend => {
                       return new Promise((resolve, reject) => {
-                        T.get('search/tweets', { q: JSON.stringify(trend.name), count: 1 }, function (err, data3, response) {
-                          try {
+                        T.get('search/tweets', { q: JSON.stringify(trend.name), count: 100 }, function (err, data3, response) {
+                          try {                            
                             //do this first then send to ajax
-                            resolve(data3.statuses[0].text);
+                            trendtopic.push(trend.name);
+                            // process the twitter with sentimental analysis
+                            var rate = 0;                      
+                            for (i = 0; i < 100; i++) {
+                              var score = analyzer.getSentiment(tokenizer.tokenize(data3.statuses[i].text));
+                              scorearr.push(score);
+                              rate = rate + score;                             
+                            } 
+                            rate = rate/100;
+                            avg_rate.push(rate);
+                            resolve(data3.statuses[0].text);                            
                           } catch (err) {
                             console.log(err);
-                            res.send("");
-                            
+                            res.send("");                            
                           }
                         })
                       })
                     })
                   ).then(result => {
-                    // process the twitter with sentimental analysis
-                    var score1 = analyzer.getSentiment(tokenizer.tokenize(result[0]));
-                    var score2 = analyzer.getSentiment(tokenizer.tokenize(result[1]));
-                    var score3 = analyzer.getSentiment(tokenizer.tokenize(result[2]));
-                    var scorearr = [score1, score2, score3];
-
                     // push the scores into json to send to ajax
-                    var JSONResult = JSON.stringify({ url: ChartURL, result, score: scorearr});
+                    var JSONResult = JSON.stringify({ url: ChartURL, result, score: scorearr, topic: trendtopic, rating: avg_rate});
                     
                     // check that it serves from twitter and save in redis and S3
                     console.log("Served from Twitter");

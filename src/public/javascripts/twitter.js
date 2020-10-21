@@ -7,6 +7,14 @@ function showTweet(e) {
             //Redirect to router funciton in index.js
             url: "/search?location=" + input, success: function (result) {
                 var JSONResult = JSON.parse(result);
+                
+                //Render twitter topics in html
+                let topic1 = document.getElementsByClassName('topic1');
+                topic1[0].innerHTML = JSON.stringify(JSONResult.topic[0]);
+                let topic2 = document.getElementsByClassName('topic2');
+                topic2[0].innerHTML = JSON.stringify(JSONResult.topic[1]);
+                let topic3 = document.getElementsByClassName('topic3');
+                topic3[0].innerHTML = JSON.stringify(JSONResult.topic[2]);
 
                 //Render twitter posts in html
                 let postDiv = document.getElementsByClassName('post1');
@@ -30,11 +38,11 @@ function showTweet(e) {
 
                 //Render sentimental scores in html
                 let score1 = document.getElementsByClassName('score1');
-                score1[0].innerHTML = JSON.stringify(JSONResult.score[0]);
+                score1[0].innerHTML = JSON.stringify(JSONResult.rating[0]);
                 let score2 = document.getElementsByClassName('score2');
-                score2[0].innerHTML = JSON.stringify(JSONResult.score[1]);
+                score2[0].innerHTML = JSON.stringify(JSONResult.rating[1]);
                 let score3 = document.getElementsByClassName('score3');
-                score3[0].innerHTML = JSON.stringify(JSONResult.score[2]);
+                score3[0].innerHTML = JSON.stringify(JSONResult.rating[2]);
             }
         })
     } catch (error) {
