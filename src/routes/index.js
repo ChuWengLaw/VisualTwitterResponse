@@ -119,10 +119,11 @@ router.get('/search', (req, res) => {
                   var mystring = JSON.stringify(data2);
                   mystring = mystring.split('#').join('');
                   data2 = JSON.parse(mystring);
-
+                  var volume_trends = 0;
                   ChartURL = `https://quickchart.io/chart?c={type:'bar',data:{labels:[`
                   for (var i = 0; i < data2[0].trends.length; i++) {
                     if (data2[0].trends[i].tweet_volume != null) {
+                      volume_trends = volume_trends + 1;
                       ChartURL = ChartURL + `'` + data2[0].trends[i].name + `'` + `,`;
                     }
                   }
@@ -137,7 +138,7 @@ router.get('/search', (req, res) => {
                   ChartURL = ChartURL.slice(0, -1);
                   ChartURL = ChartURL + `]}]}}`;
 
-                  if (data2[0].trends.length == 0)
+                  if (volume_trends == 0)
                   {
                     ChartURL = `https://quickchart.io/chart?c={type:'bar',data:{labels:[],datasets:[{label:'No Trends to Show',data:[]}]}}`
                   }
@@ -152,7 +153,8 @@ router.get('/search', (req, res) => {
                             resolve(data3.statuses[0].text);
                           } catch (err) {
                             console.log(err);
-                            reject(err);
+                            res.send("");
+                            
                           }
                         })
                       })
@@ -180,6 +182,7 @@ router.get('/search', (req, res) => {
                     return res.send(JSONResult);
                   }).catch(error => {
                     console.log(error);
+                    res.send("");
                   })
                 })
               })
