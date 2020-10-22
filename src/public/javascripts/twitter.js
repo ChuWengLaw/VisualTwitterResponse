@@ -10,6 +10,8 @@ function showTweet(e) {
 
                 if (result === "") {
                     console.log("catched in twitter.js");
+                    console.log(JSONResult);
+                    console.log(result);
                     $("#myModal").modal();
                 }
                 
