@@ -134,7 +134,11 @@ router.get('/search', (req, res) => {
                             // process the twitter with sentimental analysis
                             var rate = 0;                      
                             for (i = 0; i < 100; i++) {
-                              var score = analyzer.getSentiment(tokenizer.tokenize(data3.statuses[i].text));
+                              try{
+                                var score = analyzer.getSentiment(tokenizer.tokenize(data3.statuses[i].text));
+                              }catch{
+                                var score = 0;
+                              }
                               scorearr.push(score);
                               rate = rate + score;                             
                             } 
@@ -147,7 +151,7 @@ router.get('/search', (req, res) => {
                               rate = "Neutral :|"
                             }
                             avg_rate.push(rate);
-                            resolve(data3.statuses[0].text);                            
+                            resolve(data3.statuses[0].text);
                           } catch (err) {
                             console.log(err);
                             res.send("");                            
