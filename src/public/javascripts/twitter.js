@@ -6,15 +6,7 @@ function showTweet(e) {
         $.ajax({
             //Redirect to router funciton in index.js
             url: "/search?location=" + input, success: function (result) {
-                console.log(result);
-                if (result === "") {
-                    console.log("catched in twitter.js");
-                    console.log(result);
-                    $("#myModal").modal();
-                }
                 var JSONResult = JSON.parse(result);
-
-
                 
                 //Render twitter topics in html
                 let topic1 = document.getElementsByClassName('topic1');
@@ -66,6 +58,8 @@ function showTweet(e) {
             }
         })
     } catch (error) {
+        console.log("catched in twitter.js");
+        $("#myModal").modal();
         console.log(error);
     }
 }
