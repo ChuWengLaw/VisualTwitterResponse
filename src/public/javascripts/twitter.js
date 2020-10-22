@@ -8,7 +8,8 @@ function showTweet(e) {
             url: "/search?location=" + input, success: function (result) {
                 var JSONResult = JSON.parse(result);
 
-                if (result == "") {
+                if (result === "") {
+                    console.log("catched in twitter.js");
                     $("#myModal").modal();
                 }
                 
