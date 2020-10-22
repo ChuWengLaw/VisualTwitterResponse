@@ -7,6 +7,10 @@ function showTweet(e) {
             //Redirect to router funciton in index.js
             url: "/search?location=" + input, success: function (result) {
                 var JSONResult = JSON.parse(result);
+
+                if (result == "") {
+                    $("#myModal").modal();
+                }
                 
                 //Render twitter topics in html
                 let topic1 = document.getElementsByClassName('topic1');
