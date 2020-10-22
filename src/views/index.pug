@@ -53,4 +53,14 @@ block content
     #sentchart
     label(style="font-size:18px" text-align="right") How many Tweets on different trends.
     #chart
+    #myModal.modal.fade(role='dialog')
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close(type='button' data-dismiss='modal') &times;
+            h4.modal-title Error
+          .modal-body
+            p Please enter a valid location.
+          .modal-footer
+            button.btn.btn-default(type='button' data-dismiss='modal') Close
       
